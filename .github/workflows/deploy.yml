@@ -1,44 +1,18 @@
+- name: Configure SSH
+  env:
+    EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+    EC2_HOST: ${{ secrets.EC2_HOST }}
+  run: |
+    set -eu
 
-name: Deploy Portfolio to EC2
+    mkdir -p "$HOME/.ssh"
+    chmod 700 "$HOME/.ssh"
 
-on:
-  push:
-    branches:
-      - main
+    printf '%s\n' "$EC2_SSH_KEY" | tr -d '\r' > "$HOME/.ssh/deploy_key"
+    chmod 600 "$HOME/.ssh/deploy_key"
 
-permissions:
-  contents: read
+    test -s "$HOME/.ssh/deploy_key"
+    ssh-keygen -y -f "$HOME/.ssh/deploy_key" > /dev/null
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Configure SSH
-        env:
-          EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
-          EC2_HOST: ${{ secrets.EC2_HOST }}
-        run: |
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-          printf '%s\n' "$EC2_SSH_KEY" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -H "$EC2_HOST" >> ~/.ssh/known_hosts
-
-      - name: Deploy website
-        env:
-          EC2_HOST: ${{ secrets.EC2_HOST }}
-          EC2_USER: ${{ secrets.EC2_USER }}
-        run: |
-          scp -i ~/.ssh/deploy_key \
-            index.html styles.css script.js \
-            "$EC2_USER@$EC2_HOST:/tmp/portfolio-deploy/"
-
-          ssh -i ~/.ssh/deploy_key "$EC2_USER@$EC2_HOST" \
-            'sudo install -d -o ubuntu -g ubuntu /var/www/portfolio &&
-             cp /tmp/portfolio-deploy/index.html /var/www/portfolio/ &&
-             cp /tmp/portfolio-deploy/styles.css /var/www/portfolio/ &&
-             cp /tmp/portfolio-deploy/script.js /var/www/portfolio/'
+    ssh-keyscan -T 10 -H "$EC2_HOST" >> "$HOME/.ssh/known_hosts"
+    chmod 600 "$HOME/.ssh/known_hosts"
