@@ -1,18 +1,51 @@
-- name: Configure SSH
-  env:
-    EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
-    EC2_HOST: ${{ secrets.EC2_HOST }}
-  run: |
-    set -eu
 
-    mkdir -p "$HOME/.ssh"
-    chmod 700 "$HOME/.ssh"
+name: Deploy portfolio to EC2
 
-    printf '%s\n' "$EC2_SSH_KEY" | tr -d '\r' > "$HOME/.ssh/deploy_key"
-    chmod 600 "$HOME/.ssh/deploy_key"
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
-    test -s "$HOME/.ssh/deploy_key"
-    ssh-keygen -y -f "$HOME/.ssh/deploy_key" > /dev/null
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
 
-    ssh-keyscan -T 10 -H "$EC2_HOST" >> "$HOME/.ssh/known_hosts"
-    chmod 600 "$HOME/.ssh/known_hosts"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure SSH
+        env:
+          EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+        run: |
+          set -eu
+          mkdir -p "$HOME/.ssh"
+          chmod 700 "$HOME/.ssh"
+
+          printf '%s\n' "$EC2_SSH_KEY" | tr -d '\r' > "$HOME/.ssh/deploy_key"
+          chmod 600 "$HOME/.ssh/deploy_key"
+
+          test -s "$HOME/.ssh/deploy_key"
+          ssh-keygen -y -f "$HOME/.ssh/deploy_key" > /dev/null
+
+          ssh-keyscan -T 10 -H "$EC2_HOST" >> "$HOME/.ssh/known_hosts"
+          chmod 600 "$HOME/.ssh/known_hosts"
+
+      - name: Copy website files
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+        run: |
+          scp -i "$HOME/.ssh/deploy_key" \
+            index.html styles.css script.js \
+            "ubuntu@$EC2_HOST:/tmp/"
+
+      - name: Deploy to Nginx web root
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+        run: |
+          ssh -i "$HOME/.ssh/deploy_key" "ubuntu@$EC2_HOST" \
+            "sudo install -o www-data -g www-data -m 644 /tmp/index.html /var/www/portfolio/index.html &&
+             sudo install -o www-data -g www-data -m 644 /tmp/styles.css /var/www/portfolio/styles.css &&
+             sudo install -o www-data -g www-data -m 644 /tmp/script.js /var/www/portfolio/script.js"
