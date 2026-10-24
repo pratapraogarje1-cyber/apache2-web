@@ -1,5 +1,5 @@
 - name: Configure SSH
-  env
+  env:
     EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
     EC2_HOST: ${{ secrets.EC2_HOST }}
   run: |
