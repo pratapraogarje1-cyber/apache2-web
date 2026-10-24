@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#080b1a">
+<meta name="description" content="Pratap’s cloud engineering portfolio: AWS projects, Linux and networking labs, architecture decisions, and practical cloud learning.">
+<title>Pratap | AWS Cloud Engineer & Cloud Projects</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="header">
+<a class="brand" href="#home" aria-label="Pratap home"><span class="logo">P<span>·</span></span> Pratap<span class="accent">.</span></a>
+<button id="menuToggle" class="menu" aria-label="Toggle navigation">☰</button>
+<nav id="nav"><a href="#projects">Projects</a><a href="#architecture">Architecture</a><a href="#approach">My approach</a><a href="#contact" class="nav-cta">Connect ↗</a></nav>
+</header>
+<main>
+<section class="hero wrap" id="home">
+<div><div class="eyebrow"><i></i> CLOUD ENGINEERING • HANDS-ON PROJECTS</div>
+<div class="name-kicker">HI, I’M PRATAP</div><h1>Cloud Engineer<br><span class="gradient">Building with AWS.</span></h1>
+<p class="lead">I’m building hands-on skills in AWS, Linux, networking, and cloud infrastructure—and documenting the architecture, decisions, and lessons behind every project.</p><div class="role-chips"><span>AWS Cloud</span><span>Linux</span><span>Networking</span><span>Automation in progress</span></div>
+<div class="actions"><a class="btn primary" href="#projects">Explore my projects ↓</a><a class="btn" href="#contact">Connect with me ↗</a></div>
+<div class="proof"><span>⌘ <b>Build</b><small>Hands-on projects</small></span><span>◇ <b>Document</b><small>Architecture decisions</small></span><span>↗ <b>Improve</b><small>Cost-aware design</small></span></div>
+</div>
+<div class="hero-art"><div class="orbit orbit1"></div><div class="orbit orbit2"></div><div class="cloud"><span>☁</span><b>CLOUD</b><small>Deploy • Deliver • Learn</small></div><div class="float top">↗ <span><b>Global delivery</b><small>CloudFront CDN</small></span><i></i></div><div class="float bottom">▤ <span><b>Static hosting</b><small>Amazon S3</small></span><i></i></div></div>
+</section>
+<div class="tech wrap"><small>BUILT AROUND</small><b>Amazon S3</b><b>Amazon CloudFront</b><b>AWS Certificate Manager</b><b>HTML • CSS • JavaScript</b></div>
+<section class="wrap section" id="projects">
+<div class="section-head"><div><div class="eyebrow">SELECTED WORK</div><h2>Projects that explain <span class="gradient">the why.</span></h2></div><p>Each case study covers the goal, architecture, implementation choices, security, and what I would improve next.</p></div>
+<div class="projects">
+<article class="project featured"><div class="art art-cloud"><small>LIVE PORTFOLIO ARCHITECTURE</small><div class="flow"><span>◎<b>Visitor</b></span><em>→</em><span>⌁<b>CloudFront</b></span><em>→</em><span>▤<b>S3</b></span></div><label><i></i> Static website delivery</label></div><div class="project-body"><div class="tags"><span>AWS</span><span>Static hosting</span><span>HTTPS</span></div><h3>My Portfolio on AWS</h3><p>Hosting a static website with Amazon S3 and CloudFront, using an ACM certificate for HTTPS on a custom domain.</p><div class="facts"><span><small>OBJECTIVE</small><b>Secure public website</b></span><span><small>DESIGN FOCUS</small><b>Low-cost delivery</b></span></div><button class="text-link" data-case="portfolio">Explore case study ↗</button></div></article>
+<article class="project"><div class="art art-monitor"><div class="monitor"><span>● ● ●</span><div class="chart"></div><div class="bars"><i></i><i></i><i></i><i></i><i></i></div></div><label>OBSERVE → UNDERSTAND → ACT</label></div><div class="project-body"><div class="tags"><span>AWS</span><span>Monitoring</span></div><h3>Cloud Monitoring Lab</h3><p>A planned lab for learning metrics, log collection, alarms, and troubleshooting with CloudWatch.</p><div class="facts"><span><small>STATUS</small><b>Planned lab</b></span><span><small>FOCUS</small><b>Observability</b></span></div><button class="text-link" data-case="monitoring">View project plan ↗</button></div></article>
+<article class="project"><div class="art art-pipeline"><span class="pipe">Git</span><i></i><span class="pipe active">Build</span><i></i><span class="pipe">Deploy</span><label>FUTURE AUTOMATION PROJECT</label></div><div class="project-body"><div class="tags"><span>DevOps</span><span>CI/CD</span></div><h3>Static Site Deployment Pipeline</h3><p>A future project to automate checks and deployment, with a safe path to refresh cached files.</p><div class="facts"><span><small>STATUS</small><b>Planned project</b></span><span><small>FOCUS</small><b>Automation</b></span></div><button class="text-link" data-case="cicd">View project plan ↗</button></div></article>
+</div><p class="note">Project honesty note: the live portfolio is the current implementation. Monitoring and CI/CD are marked as planned labs—update their status only after you build and test them.</p>
+</section>
+<section class="architecture" id="architecture"><div class="wrap arch-grid"><div><div class="eyebrow">UNDER THE HOOD</div><h2>A simple architecture.<br><span class="gradient">Purposeful choices.</span></h2><p class="muted">This site uses a lightweight static architecture to keep hosting simple and avoid adding a server that the site does not need.</p><ul class="checks"><li><b>✓</b><span><strong>HTTPS at the edge</strong><small>CloudFront uses the ACM certificate for the custom domain.</small></span></li><li><b>✓</b><span><strong>Private S3 origin</strong><small>Use Origin Access Control (OAC) so the bucket can remain private.</small></span></li><li><b>✓</b><span><strong>Cost-aware by design</strong><small>No EC2 instance or database is needed for a static portfolio.</small></span></li></ul></div>
+<div class="diagram"><div class="diagram-head">REQUEST FLOW <span><i></i> STATIC SITE</span></div><div class="diagram-flow"><div class="node"><span>◎</span><b>Visitor</b><small>Browser</small></div><div class="arrow"><small>HTTPS</small>→</div><div class="node edge"><span>⌁</span><b>CloudFront</b><small>CDN + TLS</small><em>ACM certificate</em></div><div class="arrow"><small>Origin</small>→</div><div class="node storage"><span>▤</span><b>Amazon S3</b><small>Static files</small><em>OAC protected</em></div></div><div class="diagram-foot">⬡ <span><b>Security boundary</b><small>CloudFront accesses the private S3 origin through OAC.</small></span></div></div></div></section>
+<section class="wrap section" id="approach"><div class="section-head"><div><div class="eyebrow">HOW I WORK</div><h2>Make it work. Make it clear.<br><span class="gradient">Make it better.</span></h2></div><p>Practical implementation and transparent trade-offs—not just a list of services.</p></div><div class="principles"><article><span>01</span><h3>Start with the goal</h3><p>Define the problem and success criteria before selecting services.</p></article><article><span>02</span><h3>Design for security</h3><p>Use least privilege, protect origins, and never expose credentials.</p></article><article><span>03</span><h3>Measure trade-offs</h3><p>Consider reliability, performance, operational effort, and cost.</p></article><article><span>04</span><h3>Document learning</h3><p>Capture what worked, what failed, and what you would improve.</p></article></div></section>
+<section class="wrap contact" id="contact"><div><div class="eyebrow">LET'S CONNECT</div><h2>Building something in the cloud?</h2><p>I'm documenting my cloud engineering journey and building practical projects one step at a time.</p></div><div class="actions"><a class="btn primary" href="https://www.linkedin.com/in/YOUR_LINKEDIN_USERNAME/" target="_blank" rel="noreferrer">Connect on LinkedIn ↗</a><a class="btn" href="https://github.com/YOUR_GITHUB_USERNAME" target="_blank" rel="noreferrer">Explore GitHub ↗</a></div></section>
+</main>
+<footer class="wrap footer"><a class="brand" href="#home" aria-label="Pratap home"><span class="logo">P<span>·</span></span> Pratap<span class="accent">.</span></a><span>Practical cloud learning, documented in public.</span><a href="#home">Back to top ↑</a></footer>
+<dialog id="caseDialog"><button id="closeDialog" class="close" aria-label="Close">×</button><div class="eyebrow" id="caseEyebrow"></div><h2 id="caseTitle"></h2><p class="muted" id="caseSummary"></p><div id="caseBody"></div></dialog>
+<script src="script.js"></script>
+</body></html>
